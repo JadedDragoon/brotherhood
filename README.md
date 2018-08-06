@@ -1,2 +1,2 @@
 # brotherhood
-Brotherhood of Steel wordpress site
+Brotherhood of Steel wordpress theme
