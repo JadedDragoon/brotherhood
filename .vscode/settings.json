@@ -1,9 +1,0 @@
-{
-    "cSpell.words": [
-        "twentyseventeen"
-    ],
-    "php.suggest.basic": false,
-    "phpcs.executablePath": "./vendor/bin/phpcs",
-    "phpcs.standard": "WordPress-Core",
-    "editor.insertSpaces": false
-}
