@@ -2,6 +2,7 @@
 add_action( 'wp_enqueue_scripts', 'brotherhood_enqueue_styles' );
 function brotherhood_enqueue_styles() {
 
+	# set enqueue names
 	$parent_style = 'twentyseventeen-style';
 	$child_style  = 'brotherhood-style';
 
