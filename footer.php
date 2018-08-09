@@ -47,7 +47,7 @@
 </div><!-- #page -->
 <?php wp_footer(); ?>
 
-<script type="text/javascript" src="/assets/js/ons-page.js"></script>
+<script type="text/javascript" src="/assets/js/one-page.js"></script>
 
 </body>
 </html>
