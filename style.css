@@ -12,6 +12,9 @@
  Text Domain:  brotherhood
 */
 
+@import 'assets/fonts/destroy_regular_macroman/stylesheet.css';
+@import 'assets/fonts/topsecret_bold_macroman/stylesheet.css';
+
 .site-title {
 	font-family: destroyregular, "Libre Franklin", "Helvetica Neue", helvetica, arial, sans-serif;
 }

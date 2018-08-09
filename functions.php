@@ -7,15 +7,9 @@ function brotherhood_enqueue_styles() {
 	$child_style  = 'brotherhood-style';
 
 	wp_enqueue_style( $parent_style, get_template_directory_uri() . '/style.css' );
-	wp_enqueue_style( 'topsecret-font', get_template_directory_uri() . '/assets/fonts/topsecret_bold_macroman/stylesheet.css' );
-	wp_enqueue_style( 'destroy-font', get_template_directory_uri() . '/assets/fonts/destroy_regular_macroman/stylesheet.css' );
 	wp_enqueue_style( $child_style,
 		get_stylesheet_directory_uri() . '/style.css',
-		array(
-			$parent_style,
-			'topsecret-font',
-			'destroy-font',
-		),
+		array( $parent_style ),
 		wp_get_theme()->get( 'Version' )
 	);
 }
