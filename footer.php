@@ -47,5 +47,7 @@
 </div><!-- #page -->
 <?php wp_footer(); ?>
 
+<script type="text/javascript" src"/assets/js/ons-page.js"></script>
+
 </body>
 </html>
