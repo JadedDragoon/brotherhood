@@ -11,3 +11,7 @@
  Tags:         one-column, two-columns, right-sidebar, flexible-header, accessibility-ready, custom-colors, custom-header, custom-menu, custom-logo, editor-style, featured-images, footer-widgets, post-formats, rtl-language-support, sticky-post, theme-options, threaded-comments, translation-ready
  Text Domain:  brotherhood
 */
+
+.site-title {
+	font-family: destroyregular, "Libre Franklin", "Helvetica Neue", helvetica, arial, sans-serif;
+}
