@@ -47,7 +47,7 @@
 </div><!-- #page -->
 <?php wp_footer(); ?>
 
-<script type="text/javascript" src="<?php echo get_stylesheet_directory(); ?>/assets/js/one-page.js"></script>
+<script type="text/javascript" src="<?php echo get_stylesheet_directory_uri(); ?>/assets/js/one-page.js"></script>
 
 </body>
 </html>
