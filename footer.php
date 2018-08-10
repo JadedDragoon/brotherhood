@@ -47,7 +47,16 @@
 </div><!-- #page -->
 <?php wp_footer(); ?>
 
+<?php if ( is_front_page() ) { ?>
 <script type="text/javascript" src="<?php echo get_stylesheet_directory_uri(); ?>/assets/js/one-page.js"></script>
-
+<style>
+	a.anchor {
+		display: block;
+		position: relative;
+		top: <?php echo ( is_admin_bar_showing() ? '-96px' : '-72px' ); ?>;
+		visibility: hidden;
+	}
+</style>
+<?php } ?>
 </body>
 </html>

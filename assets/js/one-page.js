@@ -2,9 +2,7 @@ jQuery( document ).ready(function(){
 	/* Add padding and id's to each front page section */
 	jQuery( "h2.entry-title" ).each( function() {
 		var panelId = jQuery( this ).html().toLowerCase().replace(/\s+/g, "-");
-		jQuery( this ).wrapInner(function() {
-			return "<span style='padding-top:96px;' id='" + panelId + "'></span>";
-		})
+		jQuery( this ).closest("div.panel-content").prepend('<a class="anchor" id='+panelId+'></a>')
 	})
 
 	/* Remove navigation link highlighting */
