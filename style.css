@@ -5,7 +5,7 @@ Description:  Brotherhood of Steel WordPress Theme
 Author:       Jeremy Cliff Armstrong
 Author URI:   http://scrapironcity.net
 Template:     twentyseventeen
-Version:      0.0.4
+Version:      0.1.0
 License:      GNU General Public License v2 or later
 License URI:  http://www.gnu.org/licenses/gpl-2.0.html
 Tags:         one-column, two-columns, right-sidebar, flexible-header, accessibility-ready, custom-colors, custom-header, custom-menu, custom-logo, editor-style, featured-images, footer-widgets, post-formats, rtl-language-support, sticky-post, theme-options, threaded-comments, translation-ready
@@ -28,7 +28,7 @@ body.page:not(.twentyseventeen-front-page) .entry-title {
 }
 
 header.entry-header .edit-link,
-#post-4 header.entry-header {
+#main article:first-of-type header.entry-header {
 	display: none;
 }
 
