@@ -49,14 +49,28 @@
 
 <?php if ( is_front_page() ) { ?>
 <script type="text/javascript" src="<?php echo get_stylesheet_directory_uri(); ?>/assets/js/one-page.js"></script>
+<?php } ?>
+<script type="text/javascript">
+	<?php if ( is_front_page() ) { ?>
+		<?php if ( is_user_logged_in() ) { ?>
+	jQuery( document ).ready(() => {
+		jQuery( "nav#site-navigation" )
+			.find("a[href='http://bos.scrapironcity.net/login']")
+			.parent()
+			.hide();
+	});
+		<?php } ?>
+	<?php } ?>
+</script>
 <style>
+	<?php if ( is_front_page() ) { ?>
 	a.anchor {
 		display: block;
 		position: relative;
 		top: <?php echo ( is_admin_bar_showing() ? '-96px' : '-72px' ); ?>;
 		visibility: hidden;
 	}
+	<?php } ?>
 </style>
-<?php } ?>
 </body>
 </html>
