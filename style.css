@@ -5,7 +5,7 @@ Description:  Brotherhood of Steel WordPress Theme
 Author:       Jeremy Cliff Armstrong
 Author URI:   http://scrapironcity.net
 Template:     twentyseventeen
-Version:      0.2.0
+Version:      0.2.1
 License:      GNU General Public License v2 or later
 License URI:  http://www.gnu.org/licenses/gpl-2.0.html
 Tags:         one-column, two-columns, right-sidebar, flexible-header, accessibility-ready, custom-colors, custom-header, custom-menu, custom-logo, editor-style, featured-images, footer-widgets, post-formats, rtl-language-support, sticky-post, theme-options, threaded-comments, translation-ready
@@ -21,8 +21,13 @@ Text Domain:  brotherhood
 	font-family: destroyregular, "Libre Franklin", "Helvetica Neue", helvetica, arial, sans-serif;
 }
 
-.site-branding-text {
-
+.colors-dark .page .panel-content .entry-title {
+	color: #000 !important;
+	text-shadow:
+		-1px -1px 0 #FFF,
+		 1px -1px 0 #FFF,
+		-1px  1px 0 #FFF,
+		 1px  1px 0 #FFF;
 }
 
 .page-title,
@@ -39,17 +44,18 @@ header.entry-header .edit-link,
 body.has-header-image .site-title,
 body.has-header-video .site-title,
 body.has-header-image .site-title a,
-body.has-header-video .site-title a {
+body.has-header-video .site-title a,
+nav#site-navigation li.menu-item a:hover {
 	color: hsl(0, 0%, 0%);
 	text-shadow:
 		-1px -1px 0 #FFF,
 		 1px -1px 0 #FFF,
-		-1px 1px 0 #FFF,
-		 1px 1px 0 #FFF,
-		 3px 3px 20px #666,
-		-3px 3px 20px #666,
-		 3px -3px 20px #666,
-		-3px -3px 20px #666;
+		-1px  1px 0 #FFF,
+		 1px  1px 0 #FFF,
+		-0.1875em -0.1875em 1.25em #666,
+		-0.1875em  0.1875em 1.25em #666,
+		 0.1875em -0.1875em 1.25em #666,
+		 0.1875em  0.1875em 1.25em #666;
 }
 
 body.has-header-image .site-description,
@@ -59,12 +65,41 @@ body.has-header-video .site-description {
 	text-shadow:
 		-1px -1px 0 #000,
 		 1px -1px 0 #000,
-		-1px 1px 0 #000,
-		 1px 1px 0 #000,
-		 3px 3px 20px #666,
-		-3px 3px 20px #666,
-		 3px -3px 20px #666,
-		-3px -3px 20px #666;
+		-1px  1px 0 #000,
+		 1px  1px 0 #000,
+		-0.1875em -0.1875em 1.25em #666,
+		-0.1875em  0.1875em 1.25em #666,
+		 0.1875em -0.1875em 1.25em #666,
+		 0.1875em  0.1875em 1.25em #666;
+}
+
+nav#site-navigation a.menu-scroll-down svg {
+	color: white;
+}
+nav#site-navigation a.menu-scroll-down:hover svg {
+	color: hsl(0, 0%, 0%);
+	-webkit-filter:
+		drop-shadow(-1px -1px 0 #FFF)
+		drop-shadow( 1px -1px 0 #FFF)
+		drop-shadow(-1px  1px 0 #FFF)
+		drop-shadow( 1px  1px 0 #FFF)
+		drop-shadow(0 0 1.25em #666)
+		drop-shadow(0 0 1.25em #666);
+	filter:
+		drop-shadow(-1px -1px 0 #FFF)
+		drop-shadow( 1px -1px 0 #FFF)
+		drop-shadow(-1px  1px 0 #FFF)
+		drop-shadow( 1px  1px 0 #FFF)
+		drop-shadow(0 0 1.25em #666)
+		drop-shadow(0 0 1.25em #666);
+}
+
+.navigation-top a {
+	transition-property: color, filter, text-shadow;
+}
+
+a.custom-logo-link {
+	display: none;
 }
 
 @media screen and (min-width: 30em) {
@@ -86,6 +121,18 @@ body.has-header-video .site-description {
 	.twentyseventeen-front-page.page-one-column .entry-header,
 	.archive.page-one-column:not(.has-sidebar) .page-header {
 		margin-bottom: 3em;
+	}
+
+	a.custom-logo-link {
+		display: inline-block;
+	}
+}
+
+@media screen and (min-width: 55em) {
+	#login-out-link {
+		position: absolute;
+		right: 50px;
+		/* float: right; */
 	}
 }
 
