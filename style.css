@@ -1,20 +1,88 @@
 /*
- Theme Name:   Brotherhood
- Theme URI:    http://bos.scrapironcity.net
- Description:  Brotherhood of Steel WordPress Theme
- Author:       Jeremy Cliff Armstrong
- Author URI:   http://scrapironcity.net
- Template:     twentyseventeen
- Version:      0.0.3e
- License:      GNU General Public License v2 or later
- License URI:  http://www.gnu.org/licenses/gpl-2.0.html
- Tags:         one-column, two-columns, right-sidebar, flexible-header, accessibility-ready, custom-colors, custom-header, custom-menu, custom-logo, editor-style, featured-images, footer-widgets, post-formats, rtl-language-support, sticky-post, theme-options, threaded-comments, translation-ready
- Text Domain:  brotherhood
+Theme Name:   Brotherhood
+Theme URI:    http://bos.scrapironcity.net
+Description:  Brotherhood of Steel WordPress Theme
+Author:       Jeremy Cliff Armstrong
+Author URI:   http://scrapironcity.net
+Template:     twentyseventeen
+Version:      0.0.4
+License:      GNU General Public License v2 or later
+License URI:  http://www.gnu.org/licenses/gpl-2.0.html
+Tags:         one-column, two-columns, right-sidebar, flexible-header, accessibility-ready, custom-colors, custom-header, custom-menu, custom-logo, editor-style, featured-images, footer-widgets, post-formats, rtl-language-support, sticky-post, theme-options, threaded-comments, translation-ready
+Text Domain:  brotherhood
 */
 
 @import 'assets/fonts/destroy_regular_macroman/stylesheet.css';
 @import 'assets/fonts/topsecret_bold_macroman/stylesheet.css';
 
-.site-title {
+.navigation-top,
+.entry-title,
+.site-branding-text {
 	font-family: destroyregular, "Libre Franklin", "Helvetica Neue", helvetica, arial, sans-serif;
+}
+
+.page-title,
+.page .panel-content .entry-title,
+body.page:not(.twentyseventeen-front-page) .entry-title {
+	font-size: 1.25rem;
+}
+
+header.entry-header .edit-link,
+#post-4 header.entry-header {
+	display: none;
+}
+
+body.has-header-image .site-title,
+body.has-header-video .site-title,
+body.has-header-image .site-title a,
+body.has-header-video .site-title a {
+	color: hsl(0, 0%, 0%);
+	text-shadow:
+		-1px -1px 0 #FFF,
+		 1px -1px 0 #FFF,
+		-1px 1px 0 #FFF,
+		 1px 1px 0 #FFF;
+}
+
+body.has-header-image .site-description,
+body.has-header-video .site-description {
+	color: hsl(0, 0%, 100%);
+	opacity: 100%;
+	text-shadow:
+		-1px -1px 0 #000,
+		 1px -1px 0 #000,
+		-1px 1px 0 #000,
+		 1px 1px 0 #000;
+}
+
+@media screen and (min-width: 30em) {
+	.panel-content .entry-header {
+		margin-bottom: 3.5em;
+	}
+	.page-one-column .panel-content .wrap {
+		max-width: none;
+	}
+}
+
+@media screen and (min-width: 48em) {
+	.site-description {
+    	font-size: 16px;
+		font-size: 1.25rem;
+	}
+
+	.panel-image {
+		max-height: 400px;
+	}
+
+	.page.page-one-column .entry-header,
+	.twentyseventeen-front-page.page-one-column .entry-header,
+	.archive.page-one-column:not(.has-sidebar) .page-header {
+		margin-bottom: 3em;
+	}
+}
+
+@media screen and (min-width: 64em) {
+	.page-one-column .panel-content .wrap {
+		max-width: 1500px;
+	}
 }
