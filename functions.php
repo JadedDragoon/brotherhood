@@ -53,15 +53,15 @@ function brotherhood_enqueue_styles() {
 	 * https://wordpress.org/support/topic/best-way-to-create-a-css-file-dynamically/page/2/
 	 * For importing WordPress functions into dynamic css
 	 */
+	add_action( 'wp_ajax_dynamic_css', 'dynamic_css' );
+	add_action( 'wp_ajax_nopriv_dynamic_css', 'dynamic_css' );
 	wp_enqueue_style(
 		'dynamic-css',
 		admin_url( 'admin-ajax.php' ) . '?action=dynamic_css',
 		$style_deps,
 		wp_get_theme()->get( 'Version' )
 	);
-	add_action( 'wp_ajax_dynamic_css', 'dynaminc_css' );
-	add_action( 'wp_ajax_nopriv_dynamic_css', 'dynaminc_css' );
-	function dynaminc_css() {
+	function dynamic_css() {
 		require( get_stylesheet_directory() . '/style.css.php' );
 		exit;
 	}
