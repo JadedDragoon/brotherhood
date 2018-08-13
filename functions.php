@@ -1,6 +1,5 @@
 <?php
 include_once( ABSPATH . 'wp-admin/includes/plugin.php' );
-define( 'WP_DEBUG', true );
 
 add_action( 'wp_enqueue_scripts', 'brotherhood_enqueue_styles' );
 function brotherhood_enqueue_styles() {
@@ -28,7 +27,7 @@ function brotherhood_enqueue_styles() {
 		if ( is_plugin_active( $value ) ) {
 			wp_enqueue_style(
 				$key,
-				$theme_dir . '/plugins/' . $key . '/style.css.php'
+				$theme_dir . '/plugins/' . $key . '/style.css'
 			);
 			array_push( $style_deps, $key );
 		}
