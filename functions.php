@@ -10,6 +10,8 @@ function brotherhood_enqueue_styles() {
 
 	# init needed vars
 	$style_deps = array();
+	$theme_dir  = get_stylesheet_directory_uri();
+	$parent_dir = get_template_directory_uri();
 
 	/**********************
 	 * Style Dependencies *
@@ -25,14 +27,14 @@ function brotherhood_enqueue_styles() {
 		if ( is_plugin_active( $value ) ) {
 			wp_enqueue_style(
 				$key,
-				get_stylesheet_directory_uri() . 'plugins/' . $key . '/style.css'
+				$theme_dir . 'plugins/' . $key . '/style.css'
 			);
 			array_push( $style_deps, $key );
 		}
 	}
 
 	# load parent theme
-	wp_enqueue_style( $parent_style, get_template_directory_uri() . '/style.css' );
+	wp_enqueue_style( $parent_style, $theme_dir . '/style.css' );
 	array_push( $style_deps, $parent_style );
 
 	/***************************
@@ -60,7 +62,7 @@ function brotherhood_enqueue_styles() {
 	add_action( 'wp_ajax_dynamic_css', 'dynaminc_css' );
 	add_action( 'wp_ajax_nopriv_dynamic_css', 'dynaminc_css' );
 	function dynaminc_css() {
-		require( get_stylesheet_directory() . '/css/dynamic.css.php' );
+		require( get_stylesheet_directory() . '/style.css.php' );
 		exit;
 	}
 
