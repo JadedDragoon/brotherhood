@@ -27,7 +27,7 @@ function brotherhood_enqueue_styles() {
 		if ( is_plugin_active( $value ) ) {
 			wp_enqueue_style(
 				$key,
-				$theme_dir . 'plugins/' . $key . '/style.css.php'
+				$theme_dir . '/plugins/' . $key . '/style.css.php'
 			);
 			array_push( $style_deps, $key );
 		}
