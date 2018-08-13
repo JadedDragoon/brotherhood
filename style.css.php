@@ -80,7 +80,7 @@ body.has-header-image .site-description,
 body.has-header-video .site-description {
 	color: hsl(0, 0%, 100%);
 	opacity: 100%;
-	text-shadow: <?=$stroke_dark_text?>,<?=$anti_glow_text?>;
+	text-shadow: <?=$stroke_light_text?>,<?=$anti_glow_text?>;
 }
 
 nav#site-navigation a.menu-scroll-down svg {
