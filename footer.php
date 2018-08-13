@@ -62,5 +62,16 @@
 	});
 </script>
 <?php } ?>
+<style type="text/css">
+<?php if ( is_front_page() ) { ?>
+/* Front Page Only Css */
+a.anchor {
+	display: block;
+	position: relative;
+	top: <?php echo ( is_admin_bar_showing() ? '-96px' : '-72px' ); ?>;
+	visibility: hidden;
+}
+<?php } ?>
+</style>
 </body>
 </html>

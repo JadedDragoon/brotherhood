@@ -37,31 +37,13 @@
 		drop-shadow(0 0 1.25em #666)
 		drop-shadow(0 0 1.25em #666)';
 
-	/************************
-	 * Conditional Includes *
-	 ************************/
-
-	/************
-	 * Includes *
-	 ************/
-	$inc_dir = get_stylesheet_directory();
-	require $inc_dir . 'assets/fonts/destroy_regular_macroman/stylesheet.css';
-	require $inc_dir . 'assets/fonts/topsecret_bold_macroman/stylesheet.css';
-
 	// for highlighting
 	// phpcs:disable
 	if ( FALSE ) { ?><style><?php }
 ?>
 
-<?php if ( is_front_page() ) { ?>
-/* Front Page Only Css */
-a.anchor {
-	display: block;
-	position: relative;
-	top: <?php echo ( is_admin_bar_showing() ? '-96px' : '-72px' ); ?>;
-	visibility: hidden;
-}
-<?php } ?>
+@import $inc_dir . 'assets/fonts/destroy_regular_macroman/stylesheet.css';
+@import $inc_dir . 'assets/fonts/topsecret_bold_macroman/stylesheet.css';
 
 .navigation-top,
 .entry-title,
