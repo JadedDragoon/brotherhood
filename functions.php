@@ -34,7 +34,7 @@ function brotherhood_enqueue_styles() {
 	}
 
 	# load parent theme
-	wp_enqueue_style( $parent_style, $theme_dir . '/style.css' );
+	wp_enqueue_style( $parent_style, $parent_dir . '/style.css' );
 	array_push( $style_deps, $parent_style );
 
 	/***************************

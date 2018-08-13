@@ -42,8 +42,8 @@
 	if ( FALSE ) { ?><style><?php }
 ?>
 
-@import $inc_dir . 'assets/fonts/destroy_regular_macroman/stylesheet.css';
-@import $inc_dir . 'assets/fonts/topsecret_bold_macroman/stylesheet.css';
+@import 'assets/fonts/destroy_regular_macroman/stylesheet.css';
+@import 'assets/fonts/topsecret_bold_macroman/stylesheet.css';
 
 .navigation-top,
 .entry-title,
