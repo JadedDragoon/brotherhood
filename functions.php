@@ -1,17 +1,29 @@
 <?php
 include_once( ABSPATH . 'wp-admin/includes/plugin.php' );
 
+# init needed vars
+$style_deps  = array();
+$script_deps = array();
+$theme_dir   = get_stylesheet_directory_uri();
+$parent_dir  = get_template_directory_uri();
+
+# load theme
+add_action( 'wp_ajax_dynamic_css', 'dynaminc_css' );
+add_action( 'wp_ajax_nopriv_dynamic_css', 'dynaminc_css' );
 add_action( 'wp_enqueue_scripts', 'brotherhood_enqueue_styles' );
+
+function dynaminc_css() {
+	global $style_deps, $script_deps;
+	require( get_stylesheet_directory() . '/style.css.php' );
+	exit;
+}
+
 function brotherhood_enqueue_styles() {
+	global $style_deps, $script_deps, $theme_dir, $parent_dir;
 
 	# set enqueue names
 	$parent_style = 'twentyseventeen-style';
 	$child_style  = 'brotherhood-style';
-
-	# init needed vars
-	$style_deps = array();
-	$theme_dir  = get_stylesheet_directory_uri();
-	$parent_dir = get_template_directory_uri();
 
 	/**********************
 	 * Style Dependencies *
@@ -22,15 +34,34 @@ function brotherhood_enqueue_styles() {
 		'asgaros-forum' => 'asgaros-forum/asgaros-forum.php',
 	);
 
+	# font styles
+	$font_style_array = array(
+		'destroy_regular',
+		'topsecret_bold',
+	);
+
 	# load plugin styles
 	foreach ( $plugin_style_array as $key => $value ) {
 		if ( is_plugin_active( $value ) ) {
 			wp_enqueue_style(
 				$key,
-				$theme_dir . '/plugins/' . $key . '/style.css'
+				$theme_dir . '/plugins/' . $key . '/style.css',
+				array(),
+				wp_get_theme()->get( 'Version' )
 			);
 			array_push( $style_deps, $key );
 		}
+	}
+
+	# load font styles
+	foreach ( $font_style_array as $value ) {
+		wp_enqueue_style(
+			$value,
+			$theme_dir . '/assets/fonts/' . $value . '/stylesheet.css',
+			array(),
+			wp_get_theme()->get( 'Version' )
+		);
+		array_push( $style_deps, $value );
 	}
 
 	# load parent theme
@@ -41,10 +72,21 @@ function brotherhood_enqueue_styles() {
 	 * JavaScript Dependencies *
 	 ***************************/
 
-	# custom javascript files
-	$plugin_script_array = array(
-		'one-page' => 'one-page.js',
+	# javascript files
+	$script_array = array(
+		'one-page',
 	);
+
+	# load scripts
+	foreach ( $script_array as $value ) {
+		wp_enqueue_script(
+			$value,
+			$theme_dir . '/assets/js/' . $value . '/script.js',
+			array(),
+			wp_get_theme()->get( 'Version' )
+		);
+		array_push( $script_deps, $value );
+	}
 
 	/**********
 	 * Finish *
@@ -57,7 +99,8 @@ function brotherhood_enqueue_styles() {
 	# load this style
 	wp_enqueue_style(
 		$child_style,
-		get_stylesheet_directory_uri() . '/style.css.php',
+		/*get_stylesheet_directory_uri() . '/style.css.php',*/
+		admin_url( 'admin-ajax.php' ) . '?action=dynamic_css',
 		$style_deps,
 		wp_get_theme()->get( 'Version' )
 	);
@@ -75,3 +118,16 @@ function add_login_logout_link( $items, $args ) {
 	return $items;
 }
 
+/*************
+ * Functions *
+ *************/
+/*if ( is_front_page() ) {*/
+	/* Front Page Only Css */
+	/*'
+a.anchor {
+	display: block;
+	position: relative;
+	top: <?php echo ( is_admin_bar_showing() ? '-96px' : '-72px' ); ?>;
+	visibility: hidden;
+}'
+}*/

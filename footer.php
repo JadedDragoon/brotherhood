@@ -48,7 +48,7 @@
 <?php wp_footer(); ?>
 
 <?php if ( is_front_page() ) { ?>
-<script type="text/javascript" src="<?php echo get_stylesheet_directory_uri(); ?>/assets/js/one-page.js"></script>
+<!--<script type="text/javascript" src="<?php echo get_stylesheet_directory_uri(); ?>/assets/js/one-page.js"></script>-->
 <script type="text/javascript">
 	jQuery( document ).ready(() => {
 	<?php if ( is_user_logged_in() ) { ?>
@@ -62,7 +62,7 @@
 	});
 </script>
 <?php } ?>
-<style type="text/css">
+<!--<style type="text/css">
 <?php if ( is_front_page() ) { ?>
 /* Front Page Only Css */
 a.anchor {
@@ -72,6 +72,6 @@ a.anchor {
 	visibility: hidden;
 }
 <?php } ?>
-</style>
+</style>-->
 </body>
 </html>

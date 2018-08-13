@@ -1,5 +1,14 @@
 <?php
+	ob_start( 'ob_gzhandler' );
 	header( 'Content-type: text/css; charset: UTF-8' );
+	header( 'Cache-Control: must-revalidate' );
+	$offset = 60 * 60;
+
+	$expire_string = 'Expires: ' . gmdate(
+		'D, d M Y H:i:s',
+		time() + $offset
+	) . ' GMT';
+	header( $expire_string );
 
 	/*************
 	 * Variables *
@@ -41,9 +50,6 @@
 	// phpcs:disable
 	if ( FALSE ) { ?><style><?php }
 ?>
-
-@import 'assets/fonts/destroy_regular_macroman/stylesheet.css';
-@import 'assets/fonts/topsecret_bold_macroman/stylesheet.css';
 
 .navigation-top,
 .entry-title,
