@@ -16,14 +16,24 @@ $bos_parent_dir  = get_template_directory_uri();
 $bos_dynamic_imports = [
 	'front-page' => [
 		'path' => 'assets/css/front-page.css.php',
-		'cond' => true,
+		'cond' => function() {
+			return is_front_page();
+		},
 		'type' => 'style',
+	],
+];
+
+$bos_plugin_imports = [
+	'asgaros-forum' => [
+		'plugin_path' => 'asgaros-forum/asgaros-forum.php',
+		'type'        => 'style',
+		'cond'        => true,
 	],
 ];
 
 # explicitly add theme style to ajax imports
 add_action( 'wp_ajax_brotherhood_css', 'brotherhood_dynamic' );
-add_action( 'wp_ajax_brotherhood_css', 'brotherhood_dynamic' );
+add_action( 'wp_ajax_nopriv_brotherhood_css', 'brotherhood_dynamic' );
 function brotherhood_dynamic() {
 	global $bos_local_dir;
 	require( $bos_local_dir . '/style.css.php' );
@@ -31,40 +41,66 @@ function brotherhood_dynamic() {
 }
 
 # add dynamic styles and scripts to ajax imports
-foreach ( $bos_dynamic_imports as $import_name => $bos_import_options ) {
-	if ( $bos_import_options['cond'] ) {
-		error_log( print_r( $bos_import_options, true ) );
-		# define axaj include function
-		function dynamic_import() {
-			global $bos_local_dir,$bos_dynamic_imports;
-			require( $bos_local_dir . '/' . $bos_dynamic_imports[ sanitize_key( $_GET['import_name'] ) ]['path'] );
-			exit;
-		};
-
-		# register ajax action
-		add_action( 'wp_ajax_dynamic_import', 'dynamic_import' );
-		add_action( 'wp_ajax_nopriv_dynamic_import', 'dynamic_import' );
-
-		# add to dependencies
-		switch ( $bos_import_options['type'] ) {
-			case 'style':
-				$bos_style_deps[] = $import_name;
-				break;
-			case 'script':
-				$bos_script_deps[] = $import_name;
-				break;
-			default:
-				throw new Exception( 'Unknown import type: ' . $bos_import_options['type'] . ' for ' . $import_name );
-		}
+add_action( 'wp_ajax_dynamic_import', 'bos_dynamic_import' );
+add_action( 'wp_ajax_nopriv_dynamic_import', 'bos_dynamic_import' );
+foreach ( $bos_dynamic_imports as $import_name => $import_options ) {
+	if ( $import_options['cond'] ) {
+		bos_add_deps(
+			$import_options['type'],
+			$import_name
+		);
 	}
 }
-unset( $import_name, $bos_import_options );
+unset( $import_name, $import_options );
+
+# add plugin styles and scripts to ajax imports
+add_action( 'wp_ajax_plugin_import', 'bos_plugin_import' );
+add_action( 'wp_ajax_nopriv_plugin_import', 'bos_plugin_import' );
+foreach ( $bos_plugin_imports as $import_name => $import_options ) {
+	if ( $import_options['cond'] && is_plugin_active( $import_options['plugin_path'] ) ) {
+		bos_add_deps(
+			$import_options['type'],
+			$import_name
+		);
+	}
+}
+unset( $import_name, $import_options );
 
 # load theme
 add_action( 'wp_enqueue_scripts', 'brotherhood_enqueue_styles' );
 
+function bos_dynamic_import() {
+	global $bos_local_dir,$bos_dynamic_imports;
+	require( $bos_local_dir . '/' . $bos_dynamic_imports[ sanitize_key( $_GET['import_name'] ) ]['path'] );
+	exit;
+};
+
+function bos_plugin_import() {
+	global $bos_local_dir,$bos_plugin_imports;
+	$import_name    = sanitize_key( $_GET['import_name'] );
+	$import_options = $bos_plugin_imports[ $import_name ];
+
+	switch ( $import_options['type'] ) {
+		case 'style':
+			require( $bos_local_dir . '/plugins/' . $import_name . '/style.css.php' );
+			break;
+		case 'script':
+			require( $bos_local_dir . '/plugins/' . $import_name . '/script.js.php' );
+			break;
+		default:
+			throw new Exception( 'Unknown import type: ' . $import_options['type'] . ' for ' . $import_name );
+	}
+	exit;
+};
+
 function brotherhood_enqueue_styles() {
-	global $bos_style_deps, $bos_script_deps, $bos_theme_dir, $bos_parent_dir, $bos_dynamic_imports;
+	global
+		$bos_style_deps,
+		$bos_script_deps,
+		$bos_theme_dir,
+		$bos_parent_dir,
+		$bos_dynamic_imports,
+		$bos_plugin_imports;
 
 	# set enqueue names
 	$parent_style = 'twentyseventeen-style';
@@ -74,30 +110,11 @@ function brotherhood_enqueue_styles() {
 	 * Style Dependencies *
 	 **********************/
 
-	# plugin styles
-	$plugin_style_array = array(
-		'asgaros-forum' => 'asgaros-forum/asgaros-forum.php',
-	);
-
 	# font styles
 	$font_style_array = array(
 		'destroy_regular',
 		'topsecret_bold',
 	);
-
-	# load plugin styles
-	foreach ( $plugin_style_array as $key => $value ) {
-		if ( is_plugin_active( $value ) ) {
-			wp_enqueue_style(
-				$key,
-				$bos_theme_dir . '/plugins/' . $key . '/style.css',
-				array(),
-				wp_get_theme()->get( 'Version' )
-			);
-			array_push( $bos_style_deps, $key );
-		}
-	}
-	unset( $key, $value );
 
 	# load font styles
 	foreach ( $font_style_array as $value ) {
@@ -140,31 +157,32 @@ function brotherhood_enqueue_styles() {
 	 * Dynamic Dependencies *
 	 ************************/
 
-	foreach ( $bos_dynamic_imports as $import_name => $bos_import_options ) {
-		if ( $bos_import_options['cond'] ) {
-			switch ( $bos_import_options['type'] ) {
-				case 'style':
-					wp_enqueue_style(
-						$import_name,
-						admin_url( 'admin-ajax.php' ) . '?action=dynamic_import&import_name=' . $import_name,
-						isset( $bos_import_options['deps'] ) ? $bos_import_options['deps'] : array(),
-						wp_get_theme()->get( 'Version' )
-					);
-					break;
-				case 'script':
-					wp_enqueue_scripts(
-						$import_name,
-						admin_url( 'admin-ajax.php' ) . '?action=dynamic_import&import_name=' . $import_name,
-						isset( $bos_import_options['deps'] ) ? $bos_import_options['deps'] : array(),
-						wp_get_theme()->get( 'Version' )
-					);
-					break;
-				default:
-					throw new Exception( 'Unknown import type: ' . $bos_import_options['type'] . ' for ' . $import_name . '. Previous check missed!' );
-			}
+	foreach ( $bos_dynamic_imports as $import_name => $import_options ) {
+		if ( $import_options['cond'] ) {
+			bos_do_ajax_import(
+				$import_options['type'],
+				$import_name,
+				isset( $import_options['deps'] )
+					? $import_options['deps']
+					: array()
+			);
 		}
 	}
-	unset( $import_name, $bos_import_options );
+	unset( $import_name, $import_options );
+
+	foreach ( $bos_plugin_imports as $import_name => $import_options ) {
+		if ( $import_options['cond'] ) {
+			bos_do_ajax_import(
+				$import_options['type'],
+				$import_name,
+				isset( $import_options['deps'] )
+					? $import_options['deps']
+					: array(),
+				true
+			);
+		}
+	}
+	unset( $import_name, $import_options );
 
 	/**********
 	 * Finish *
@@ -180,7 +198,46 @@ function brotherhood_enqueue_styles() {
 	);
 }
 
+function bos_do_ajax_import( $type, $name, $deps, $plugin = false ) {
+	$url          = admin_url( 'admin-ajax.php' ) . '?action=' . ( $plugin ? 'plugin' : 'dynamic' ) . '_import&import_name=' . $name;
+	$dependencies = isset( $deps ) ? $deps : array();
+	$version      = wp_get_theme()->get( 'Version' );
 
+	switch ( $type ) {
+		case 'style':
+			wp_enqueue_style(
+				$name,
+				$url,
+				$dependencies,
+				$version
+			);
+			break;
+		case 'script':
+			wp_enqueue_scripts(
+				$name,
+				$url,
+				$dependencies,
+				$version
+			);
+			break;
+		default:
+			throw new Exception( 'Unknown import type: ' . $type . ' for ' . $name . '. Previous check missed!' );
+	}
+}
+
+function bos_add_deps( $type, $name ) {
+	global $bos_style_deps,$bos_script_deps;
+	switch ( $type ) {
+		case 'style':
+			$bos_style_deps[] = $name;
+			break;
+		case 'script':
+			$bos_script_deps[] = $name;
+			break;
+		default:
+			throw new Exception( 'Unknown import type: ' . $type . ' for ' . $name );
+	}
+}
 
 add_filter( 'wp_nav_menu_items', 'add_login_logout_link', 10, 2 );
 function add_login_logout_link( $items, $args ) {
