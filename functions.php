@@ -40,7 +40,7 @@ $bos_plugin_imports = [
 	'asgaros-forum' => [
 		'plugin_path' => 'asgaros-forum/asgaros-forum.php',
 		'type'        => 'style',
-		'cond'        => false,
+		'cond'        => true,
 	],
 ];
 
