@@ -1,25 +1,70 @@
 <?php
 include_once( ABSPATH . 'wp-admin/includes/plugin.php' );
+/**
+ * https://wordpress.org/support/topic/best-way-to-create-a-css-file-dynamically/page/2/
+ * For importing WordPress functions into dynamic css
+ */
+
 
 # init needed vars
-$style_deps  = array();
-$script_deps = array();
-$theme_dir   = get_stylesheet_directory_uri();
-$parent_dir  = get_template_directory_uri();
+$bos_style_deps  = [];
+$bos_script_deps = [];
+$bos_theme_dir   = get_stylesheet_directory_uri();
+$bos_local_dir   = get_stylesheet_directory();
+$bos_parent_dir  = get_template_directory_uri();
 
-# load theme
-add_action( 'wp_ajax_dynamic_css', 'dynaminc_css' );
-add_action( 'wp_ajax_nopriv_dynamic_css', 'dynaminc_css' );
-add_action( 'wp_enqueue_scripts', 'brotherhood_enqueue_styles' );
+$bos_dynamic_imports = [
+	'front-page' => [
+		'path' => 'assets/css/front-page.css.php',
+		'cond' => true,
+		'type' => 'style',
+	],
+];
 
-function dynaminc_css() {
-	global $style_deps, $script_deps;
-	require( get_stylesheet_directory() . '/style.css.php' );
+# explicitly add theme style to ajax imports
+add_action( 'wp_ajax_brotherhood_css', 'brotherhood_dynamic' );
+add_action( 'wp_ajax_brotherhood_css', 'brotherhood_dynamic' );
+function brotherhood_dynamic() {
+	global $bos_local_dir;
+	require( $bos_local_dir . '/style.css.php' );
 	exit;
 }
 
+# add dynamic styles and scripts to ajax imports
+foreach ( $bos_dynamic_imports as $import_name => $bos_import_options ) {
+	if ( $bos_import_options['cond'] ) {
+		error_log( print_r( $bos_import_options, true ) );
+		# define axaj include function
+		function dynamic_import() {
+			global $bos_local_dir,$bos_dynamic_imports;
+			require( $bos_local_dir . '/' . $bos_dynamic_imports[ sanitize_key( $_GET['import_name'] ) ]['path'] );
+			exit;
+		};
+
+		# register ajax action
+		add_action( 'wp_ajax_dynamic_import', 'dynamic_import' );
+		add_action( 'wp_ajax_nopriv_dynamic_import', 'dynamic_import' );
+
+		# add to dependencies
+		switch ( $bos_import_options['type'] ) {
+			case 'style':
+				$bos_style_deps[] = $import_name;
+				break;
+			case 'script':
+				$bos_script_deps[] = $import_name;
+				break;
+			default:
+				throw new Exception( 'Unknown import type: ' . $bos_import_options['type'] . ' for ' . $import_name );
+		}
+	}
+}
+unset( $import_name, $bos_import_options );
+
+# load theme
+add_action( 'wp_enqueue_scripts', 'brotherhood_enqueue_styles' );
+
 function brotherhood_enqueue_styles() {
-	global $style_deps, $script_deps, $theme_dir, $parent_dir;
+	global $bos_style_deps, $bos_script_deps, $bos_theme_dir, $bos_parent_dir, $bos_dynamic_imports;
 
 	# set enqueue names
 	$parent_style = 'twentyseventeen-style';
@@ -45,28 +90,30 @@ function brotherhood_enqueue_styles() {
 		if ( is_plugin_active( $value ) ) {
 			wp_enqueue_style(
 				$key,
-				$theme_dir . '/plugins/' . $key . '/style.css',
+				$bos_theme_dir . '/plugins/' . $key . '/style.css',
 				array(),
 				wp_get_theme()->get( 'Version' )
 			);
-			array_push( $style_deps, $key );
+			array_push( $bos_style_deps, $key );
 		}
 	}
+	unset( $key, $value );
 
 	# load font styles
 	foreach ( $font_style_array as $value ) {
 		wp_enqueue_style(
 			$value,
-			$theme_dir . '/assets/fonts/' . $value . '/stylesheet.css',
+			$bos_theme_dir . '/assets/fonts/' . $value . '/stylesheet.css',
 			array(),
 			wp_get_theme()->get( 'Version' )
 		);
-		array_push( $style_deps, $value );
+		array_push( $bos_style_deps, $value );
 	}
+	unset( $value );
 
 	# load parent theme
-	wp_enqueue_style( $parent_style, $parent_dir . '/style.css' );
-	array_push( $style_deps, $parent_style );
+	wp_enqueue_style( $parent_style, $bos_parent_dir . '/style.css' );
+	array_push( $bos_style_deps, $parent_style );
 
 	/***************************
 	 * JavaScript Dependencies *
@@ -81,27 +128,54 @@ function brotherhood_enqueue_styles() {
 	foreach ( $script_array as $value ) {
 		wp_enqueue_script(
 			$value,
-			$theme_dir . '/assets/js/' . $value . '/script.js',
+			$bos_theme_dir . '/assets/js/' . $value . '/script.js',
 			array(),
 			wp_get_theme()->get( 'Version' )
 		);
-		array_push( $script_deps, $value );
+		array_push( $bos_script_deps, $value );
 	}
+	unset( $value );
+
+	/************************
+	 * Dynamic Dependencies *
+	 ************************/
+
+	foreach ( $bos_dynamic_imports as $import_name => $bos_import_options ) {
+		if ( $bos_import_options['cond'] ) {
+			switch ( $bos_import_options['type'] ) {
+				case 'style':
+					wp_enqueue_style(
+						$import_name,
+						admin_url( 'admin-ajax.php' ) . '?action=dynamic_import&import_name=' . $import_name,
+						isset( $bos_import_options['deps'] ) ? $bos_import_options['deps'] : array(),
+						wp_get_theme()->get( 'Version' )
+					);
+					break;
+				case 'script':
+					wp_enqueue_scripts(
+						$import_name,
+						admin_url( 'admin-ajax.php' ) . '?action=dynamic_import&import_name=' . $import_name,
+						isset( $bos_import_options['deps'] ) ? $bos_import_options['deps'] : array(),
+						wp_get_theme()->get( 'Version' )
+					);
+					break;
+				default:
+					throw new Exception( 'Unknown import type: ' . $bos_import_options['type'] . ' for ' . $import_name . '. Previous check missed!' );
+			}
+		}
+	}
+	unset( $import_name, $bos_import_options );
 
 	/**********
 	 * Finish *
 	 **********/
-	/**
-	 * https://wordpress.org/support/topic/best-way-to-create-a-css-file-dynamically/page/2/
-	 * For importing WordPress functions into dynamic css
-	 */
 
-	# load this style
+	# load theme style
 	wp_enqueue_style(
 		$child_style,
 		/*get_stylesheet_directory_uri() . '/style.css.php',*/
-		admin_url( 'admin-ajax.php' ) . '?action=dynamic_css',
-		$style_deps,
+		admin_url( 'admin-ajax.php' ) . '?action=brotherhood_css',
+		$bos_style_deps,
 		wp_get_theme()->get( 'Version' )
 	);
 }
