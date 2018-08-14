@@ -48,6 +48,10 @@
 	font-family: <?=$font_family?>;
 }
 
+body:not(.home) div.custom-header {
+	min-height: 255px;
+}
+
 .colors-dark .page .panel-content .entry-title {
 	color: #000 !important;
 	text-shadow: <?=$stroke_dark_text?>;
