@@ -5,3 +5,8 @@
 	// phpcs:disable
 	if ( FALSE ) { ?><style><?php }
 ?>
+
+#af-wrapper,
+#af-wrapper .main-title {
+	color: #FFFFFF;
+}
