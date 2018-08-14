@@ -124,6 +124,21 @@ function brotherhood_enqueue_styles() {
 	 * Style Dependencies *
 	 **********************/
 
+	$pre_load_styles = [
+		'kill-pop-in',
+	];
+
+	foreach ( $pre_load_styles as $value ) {
+		wp_enqueue_style(
+			$value,
+			$bos_theme_dir . '/assets/css/' . $value . '.css',
+			array(),
+			wp_get_theme()->get( 'Version' )
+		);
+		array_push( $bos_style_deps, $value );
+	}
+	unset( $value );
+
 	# font styles
 	$font_style_array = [
 		'destroy_regular',
