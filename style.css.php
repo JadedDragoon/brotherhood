@@ -48,8 +48,8 @@
 	font-family: <?=$font_family?>;
 }
 
-body:not(.home) div.site-header {
-	min-height: 255px;
+body:not(.home) div.custom-header-media {
+	min-height: 183px;
 }
 
 .colors-dark .page .panel-content .entry-title {
