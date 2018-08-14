@@ -14,7 +14,7 @@ div#af-wrapper .main-title {
 div#af-wrapper  {
 	background-color: #1a2632;
 	border: solid 1em #1a2632;
-	border-radius: 1em;
+	border-radius: 1.5em;
 }
 
 div#af-wrapper .title-element {
