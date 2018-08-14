@@ -48,7 +48,7 @@
 	font-family: <?=$font_family?>;
 }
 
-body:not(.home) div.custom-header {
+body:not(.home) div.site-header {
 	min-height: 255px;
 }
 
