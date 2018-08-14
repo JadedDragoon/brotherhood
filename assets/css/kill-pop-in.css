@@ -1,3 +1,3 @@
-body:not(.home) div.site-header {
+body:not(.home) header.site-header {
 	min-height: 255px;
 }
