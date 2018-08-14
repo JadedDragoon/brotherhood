@@ -21,6 +21,10 @@ div#af-wrapper .title-element {
 	background-color: #1a2632 !important;
 }
 
+div#af-wrapper div#forum-breadcrumbs {
+	font-size: 0.8em;
+}
+
 div#af-wrapper h1.main-title {
 	margin-left: 1em;
 }
