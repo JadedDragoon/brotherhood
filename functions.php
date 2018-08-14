@@ -44,7 +44,6 @@ $bos_plugin_imports = [
 	],
 ];
 
-
 # explicitly add theme style to ajax imports
 add_action( 'wp_ajax_brotherhood_css', 'brotherhood_dynamic' );
 add_action( 'wp_ajax_nopriv_brotherhood_css', 'brotherhood_dynamic' );
