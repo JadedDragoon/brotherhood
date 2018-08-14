@@ -5,7 +5,7 @@ include_once( ABSPATH . 'wp-admin/includes/plugin.php' );
  * For importing WordPress functions into dynamic css
  */
 
- # init needed vars
+# init needed vars
 $bos_style_deps  = [];
 $bos_script_deps = [];
 $bos_theme_dir   = get_stylesheet_directory_uri();
@@ -20,15 +20,30 @@ $bos_dynamic_imports = [
 		},
 		'type' => 'style',
 	],
+
+	'one-page'  => [
+		'path' => 'assets/js/one-page.js.php',
+		'cond' => function() {
+			return is_front_page();
+		},
+		'type' => 'script',
+	],
+
+	'login-out-navbar' => [
+		'path' => 'assets/js/login-out-navbar.js.php',
+		'cond' => is_user_logged_in(),
+		'type' => 'script',
+	],
 ];
 
 $bos_plugin_imports = [
 	'asgaros-forum' => [
 		'plugin_path' => 'asgaros-forum/asgaros-forum.php',
 		'type'        => 'style',
-		'cond'        => true,
+		'cond'        => false,
 	],
 ];
+
 
 # explicitly add theme style to ajax imports
 add_action( 'wp_ajax_brotherhood_css', 'brotherhood_dynamic' );
@@ -111,10 +126,10 @@ function brotherhood_enqueue_styles() {
 	 **********************/
 
 	# font styles
-	$font_style_array = array(
+	$font_style_array = [
 		'destroy_regular',
 		'topsecret_bold',
-	);
+	];
 
 	# load font styles
 	foreach ( $font_style_array as $value ) {
@@ -131,27 +146,6 @@ function brotherhood_enqueue_styles() {
 	# load parent theme
 	wp_enqueue_style( $parent_style, $bos_parent_dir . '/style.css' );
 	array_push( $bos_style_deps, $parent_style );
-
-	/***************************
-	 * JavaScript Dependencies *
-	 ***************************/
-
-	# javascript files
-	$script_array = array(
-		'one-page',
-	);
-
-	# load scripts
-	foreach ( $script_array as $value ) {
-		wp_enqueue_script(
-			$value,
-			$bos_theme_dir . '/assets/js/' . $value . '/script.js',
-			array(),
-			wp_get_theme()->get( 'Version' )
-		);
-		array_push( $bos_script_deps, $value );
-	}
-	unset( $value );
 
 	/************************
 	 * Dynamic Dependencies *
@@ -201,7 +195,7 @@ function brotherhood_enqueue_styles() {
 function bos_do_ajax_import( $type, $name, $deps, $plugin = false ) {
 	$url          = admin_url( 'admin-ajax.php' ) . '?action=' . ( $plugin ? 'plugin' : 'dynamic' ) . '_import&import_name=' . $name;
 	$dependencies = isset( $deps ) ? $deps : array();
-	$version      = wp_get_theme()->get( 'Version' );
+	#$version      =
 
 	switch ( $type ) {
 		case 'style':
@@ -209,15 +203,15 @@ function bos_do_ajax_import( $type, $name, $deps, $plugin = false ) {
 				$name,
 				$url,
 				$dependencies,
-				$version
+				wp_get_theme()->get( 'Version' )
 			);
 			break;
 		case 'script':
-			wp_enqueue_scripts(
+			wp_enqueue_script(
 				$name,
 				$url,
 				$dependencies,
-				$version
+				wp_get_theme()->get( 'Version' )
 			);
 			break;
 		default:

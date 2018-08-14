@@ -9,6 +9,6 @@
 a.anchor {
 	display: block;
 	position: relative;
-	top: <?php echo ( is_admin_bar_showing() ? '-96px' : '-72px' ); ?>;
+	top: <?php echo ( is_admin_bar_showing() ? '-104px' : '-72px' ); ?>;
 	visibility: hidden;
 }

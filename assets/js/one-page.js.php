@@ -1,9 +1,17 @@
+<?php
+	header( 'Content-type: text/javascript; charset: UTF-8' );
+
+	// for highlighting
+	// phpcs:disable
+	if ( FALSE ) { ?><script><?php }
+?>
+
 jQuery( document ).ready(function(){
 	/* Add padding and id's to each front page section */
 	jQuery( "h2.entry-title" ).each( function() {
 		var panelId = jQuery( this ).html().toLowerCase().replace(/\s+/g, "-");
 		jQuery( this ).closest("div.panel-content").prepend('<a class="anchor" id='+panelId+'></a>')
-	})
+	});
 
 	/* Remove navigation link highlighting */
 	jQuery('#top-menu li').removeClass('current-menu-item current_page_item ');
@@ -21,5 +29,5 @@ jQuery( document ).ready(function(){
 		if ( navUrl == pageUrl ) {
 			jQuery( this ).parent().addClass('current-menu-item');
 		}
-	})
-})
+	});
+});
