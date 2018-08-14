@@ -5,8 +5,7 @@ include_once( ABSPATH . 'wp-admin/includes/plugin.php' );
  * For importing WordPress functions into dynamic css
  */
 
-
-# init needed vars
+ # init needed vars
 $bos_style_deps  = [];
 $bos_script_deps = [];
 $bos_theme_dir   = get_stylesheet_directory_uri();
@@ -79,13 +78,14 @@ function bos_plugin_import() {
 	global $bos_local_dir,$bos_plugin_imports;
 	$import_name    = sanitize_key( $_GET['import_name'] );
 	$import_options = $bos_plugin_imports[ $import_name ];
+	$file_path      = $bos_local_dir . '/plugins/' . sanitize_file_name( $import_name );
 
 	switch ( $import_options['type'] ) {
 		case 'style':
-			require( $bos_local_dir . '/plugins/' . $import_name . '/style.css.php' );
+			require( $file_path . '/style.css.php' );
 			break;
 		case 'script':
-			require( $bos_local_dir . '/plugins/' . $import_name . '/script.js.php' );
+			require( $file_path . '/script.js.php' );
 			break;
 		default:
 			throw new Exception( 'Unknown import type: ' . $import_options['type'] . ' for ' . $import_name );
