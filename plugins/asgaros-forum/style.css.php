@@ -14,15 +14,11 @@ div#af-wrapper .main-title {
 div#af-wrapper  {
 	background-color: #1a2632;
 	border: solid 1em #1a2632;
-	border-radius: 1.5em;
+	border-radius: 1em;
 }
 
 div#af-wrapper .title-element {
 	background-color: #1a2632 !important;
-}
-
-div#af-wrapper div#forum-breadcrumbs {
-	font-size: 0.8em;
 }
 
 div#af-wrapper h1.main-title {
@@ -115,4 +111,17 @@ div#af-wrapper img.avatar {
 
 div#af-wrapper span.last-post-headline {
 	display: none;
+}
+
+div#af-wrapper div.post-author {
+	font-size: 16px;
+	word-wrap: normal;
+
+	width: 200px;
+}
+
+div#af-wrapper div.post-author span.af-usergroup-tag {
+	margin: 0 auto;
+	display: inline-block;
+	background-color: gray;
 }

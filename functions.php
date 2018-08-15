@@ -1,7 +1,7 @@
 <?php
 include_once( ABSPATH . 'wp-admin/includes/plugin.php' );
 require_once( get_stylesheet_directory() . '/scripts/import-theme.php' );
-
+require_once( get_stylesheet_directory() . '/scripts/svg-inliner.php' );
 
 add_filter( 'wp_nav_menu_items', 'add_login_logout_link', 10, 2 );
 function add_login_logout_link( $items, $args ) {
