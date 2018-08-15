@@ -42,6 +42,10 @@
 	if ( FALSE ) { ?><style><?php }
 ?>
 
+body.attachment p.attachment svg {
+	fill: url(#crosshatch);
+}
+
 .navigation-top,
 .entry-title,
 .site-branding-text {
