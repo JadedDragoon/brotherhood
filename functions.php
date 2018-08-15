@@ -1,4 +1,5 @@
 <?php
+require __DIR__ . '/vendor/autoload.php';
 include_once( ABSPATH . 'wp-admin/includes/plugin.php' );
 require_once( get_stylesheet_directory() . '/scripts/import-theme.php' );
 require_once( get_stylesheet_directory() . '/scripts/svg-inliner.php' );
