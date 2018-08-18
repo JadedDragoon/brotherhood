@@ -1,6 +1,7 @@
 <?php
 	header( 'Content-type: text/css; charset: UTF-8' );
 
+
 	/*************
 	 * Variables *
 	 *************/
@@ -11,6 +12,10 @@
 		helvetica,
 		arial,
 		sans-serif';
+
+	$color_dark_text     = '#000000';
+	$color_light_text    = '#FFFFFF';
+	$color_lightish_text = '#CCCCCC';
 
 	$stroke_dark_text  = '
 		-1px -1px 0 #FFF,
@@ -46,6 +51,41 @@ body.attachment p.attachment svg {
 	fill: url(#crosshatch);
 }
 
+.so_widget_sow_editor p:last-child {
+	margin-bottom: 0;
+}
+.so-panel {
+	padding-bottom: 0;
+}
+
+figure.wp-block-embed-youtube.aligncenter iframe {
+	display: block;
+	margin: 0 auto;
+}
+
+#contact-form .sow-contact-form > p,
+#contact-form .sow-form-field-description,
+#contact-form .sow-recaptcha > div,
+#contact-form .sow-submit-wrapper input {
+	margin-left: 1em;
+}
+
+#tscta .sow-cta-base {
+	border-radius: 1em;
+}
+#tscta .sow-cta-title {
+	position: relative;
+	top: 9.6px;
+	font-family: <?=$font_family?>;
+	font-size: 2em;
+}
+#tscta .ow-icon-placement-left > span {
+	font-family: <?=$font_family?>;
+}
+#tscta .sow-cta-subtitle {
+	display: none;
+}
+
 .navigation-top,
 .entry-title,
 .site-branding-text {
@@ -53,8 +93,17 @@ body.attachment p.attachment svg {
 }
 
 .colors-dark .page .panel-content .entry-title {
-	color: #000 !important;
+	color: <?=$color_dark_text?> !important;
 	text-shadow: <?=$stroke_dark_text?>;
+}
+
+.widget_media_image img {
+	border: solid 1px rgba(255, 255, 255, 0.25);
+}
+
+.colors-dark .so-widget-sow-editor h3 {
+	font-family: <?=$font_family?>;
+	color: <?=$color_lightish_text?>;
 }
 
 .page-title,
@@ -64,7 +113,7 @@ body.page:not(.twentyseventeen-front-page) .entry-title {
 }
 
 header.entry-header .edit-link,
-#main article:first-of-type header.entry-header {
+body.home #main article:first-of-type header.entry-header {
 	display: none;
 }
 
@@ -73,13 +122,13 @@ body.has-header-video .site-title,
 body.has-header-image .site-title a,
 body.has-header-video .site-title a,
 nav#site-navigation li.menu-item a:hover {
-	color: hsl(0, 0%, 0%);
+	color: <?=$color_dark_text?>;
 	text-shadow: <?=$stroke_dark_text?>,<?=$anti_glow_text?>;
 }
 
 body.has-header-image .site-description,
 body.has-header-video .site-description {
-	color: hsl(0, 0%, 100%);
+	color: <?=$color_light_text?>;
 	opacity: 100%;
 	text-shadow: <?=$stroke_light_text?>,<?=$anti_glow_text?>;
 }
@@ -88,8 +137,8 @@ nav#site-navigation a.menu-scroll-down svg {
 	color: white;
 }
 nav#site-navigation a.menu-scroll-down:hover svg {
-	color: hsl(0, 0%, 0%);
-	-webkit-filter: <=$stroke_light_svg?><=$anti_glow_svg?>;
+	color: <?=$color_dark_text?>;
+	-webkit-filter: <=$stroke_lightish_svg?><=$anti_glow_svg?>;
 	filter: <=$stroke_light_svg?><=$anti_glow_svg?>;
 }
 
