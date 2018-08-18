@@ -4,7 +4,7 @@ use enshrined\svgSanitize\Sanitizer;
 
 add_filter( 'the_content', 'svg_inliner' );
 function svg_inliner( $content ) {
-	if ( '' === $content ) return '';
+	if ( '' === $content ) return ''; /* phpcs:ignore Generic.ControlStructures.InlineControlStructure.NotAllowed */
 	$post      = new DOMDocument();
 	$sanitizer = new Sanitizer();
 	$sanitizer->removeRemoteReferences( true );
