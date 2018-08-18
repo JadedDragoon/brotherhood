@@ -4,12 +4,12 @@ use enshrined\svgSanitize\Sanitizer;
 
 add_filter( 'the_content', 'svg_inliner' );
 function svg_inliner( $content ) {
-	if ( '' === $content ) return '';
+	if ( '' === $content ) return ''; /* phpcs:ignore Generic.ControlStructures.InlineControlStructure.NotAllowed */
 	$post      = new DOMDocument();
 	$sanitizer = new Sanitizer();
 	$sanitizer->removeRemoteReferences( true );
 
-	$post->loadHTML( $content );
+	$post->loadHTML( mb_convert_encoding( $content, 'HTML-ENTITIES', 'UTF-8' ) );
 	$img_list = $post->getElementsByTagName( 'img' );
 
 	/* regressive loop because http://php.net/manual/en/domnode.replacechild.php#50500 */
@@ -35,7 +35,7 @@ function svg_inliner( $content ) {
 		$clean_svg = $sanitizer->sanitize( file_get_contents( $svg_local_path ) );
 		if ( ! $clean_svg ) { $i--; continue; } /* phpcs:ignore Squiz.ControlStructures.ControlSignature.NewlineAfterOpenBrace, Generic.Formatting.DisallowMultipleStatements.SameLine */
 		$svg = new DOMDocument();
-		$svg->loadXML( $clean_svg );
+		$svg->loadXML( mb_convert_encoding( $clean_svg, 'HTML-ENTITIES', 'UTF-8' ) );
 
 		// replace img with svg
 		$img->parentNode->replaceChild( /* phpcs:ignore WordPress.NamingConventions.ValidVariableName.NotSnakeCaseMemberVar */
