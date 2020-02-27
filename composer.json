@@ -4,6 +4,6 @@
         "wp-coding-standards/wpcs": "^1.0"
     },
     "require": {
-        "enshrined/svg-sanitize": "^0.12.0"
+        "enshrined/svg-sanitize": "^0.13.1"
     }
 }
